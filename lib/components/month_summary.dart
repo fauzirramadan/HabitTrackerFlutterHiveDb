@@ -16,15 +16,28 @@ class MonthlySummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 25, bottom: 25),
+      padding: const EdgeInsets.only(top: 25, bottom: 15, left: 20, right: 20),
       child: HeatMap(
+        borderRadius: 10,
         startDate: createDateTimeObject(startDate),
         endDate: DateTime.now().add(const Duration(days: 52)),
         datasets: datasets,
         colorMode: ColorMode.color,
         defaultColor: Colors.grey[200],
         textColor: Colors.white,
-        showColorTip: false,
+        showColorTip: true,
+        colorTipSize: 10,
+        colorTipCount: 5,
+        colorTipHelper: const [
+          Padding(
+            padding: EdgeInsets.only(right: 8.0),
+            child: Text("Lazy day"),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text("Productive day"),
+          ),
+        ],
         showText: true,
         scrollable: true,
         size: 30,

@@ -52,6 +52,7 @@ class HabitTile extends StatelessWidget {
             children: [
               // checkbox
               Checkbox(
+                shape: const CircleBorder(),
                 value: habitCompleted,
                 onChanged: onChanged,
               ),

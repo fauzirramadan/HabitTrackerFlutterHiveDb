@@ -7,7 +7,6 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 20, top: 10),
       alignment: Alignment.centerRight,
       child: TextButton(
         onPressed: onTap,
@@ -26,7 +25,10 @@ class MyButton extends StatelessWidget {
             ),
             Text(
               "Tambah Habit",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

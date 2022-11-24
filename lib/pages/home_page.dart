@@ -7,6 +7,8 @@ import 'package:habittrackertute/data/habit_database.dart';
 import 'package:habittrackertute/utils/notif_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../components/custom_appbar.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -128,64 +130,75 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[300],
-      body: Column(
-        children: [
-          // monthly summary heat map
-          MonthlySummary(
-            datasets: db.heatMapDataSet,
-            startDate: _myBox.get("START_DATE"),
-          ),
-
-          // list of habits
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey[400],
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30))),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 20.0, left: 20),
-                        child: Text(
-                          "My Habits",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 20),
-                        ),
-                      ),
-                      MyButton(
-                        onTap: createNewHabit,
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: db.todaysHabitList.length,
-                      itemBuilder: (context, index) {
-                        return HabitTile(
-                          habitName: db.todaysHabitList[index][0],
-                          habitCompleted: db.todaysHabitList[index][1],
-                          onChanged: (value) => checkBoxTapped(value, index),
-                          settingsTapped: (context) => openHabitSettings(index),
-                          deleteTapped: (context) => deleteHabit(index),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+      body: CustomScrollView(slivers: [
+        const MySliverAppBar(),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              // monthly summary heat map
+              MonthlySummary(
+                datasets: db.heatMapDataSet,
+                startDate: _myBox.get("START_DATE"),
               ),
-            ),
-          )
-        ],
-      ),
+
+              // list of habits
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      decoration: BoxDecoration(
+                          color: Colors.grey[400],
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "My Habits",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                          MyButton(
+                            onTap: createNewHabit,
+                          ),
+                        ],
+                      ),
+                    ),
+                    db.todaysHabitList.isEmpty
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 100),
+                            child: Text(
+                              "KOSONG SEPERTI HATIMU  : )",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w700),
+                            ))
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: db.todaysHabitList.length,
+                            itemBuilder: (context, index) {
+                              return HabitTile(
+                                habitName: db.todaysHabitList[index][0],
+                                habitCompleted: db.todaysHabitList[index][1],
+                                onChanged: (value) =>
+                                    checkBoxTapped(value, index),
+                                settingsTapped: (context) =>
+                                    openHabitSettings(index),
+                                deleteTapped: (context) => deleteHabit(index),
+                              );
+                            },
+                          ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ]),
     );
   }
 }

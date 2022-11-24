@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:habittrackertute/datetime/date_time.dart';
+import 'package:habittrackertute/utils/notif_utils.dart';
 
 class MonthlySummary extends StatelessWidget {
   final Map<DateTime, int>? datasets;
@@ -18,7 +19,7 @@ class MonthlySummary extends StatelessWidget {
       padding: const EdgeInsets.only(top: 25, bottom: 25),
       child: HeatMap(
         startDate: createDateTimeObject(startDate),
-        endDate: DateTime.now().add(Duration(days: 0)),
+        endDate: DateTime.now().add(const Duration(days: 52)),
         datasets: datasets,
         colorMode: ColorMode.color,
         defaultColor: Colors.grey[200],
@@ -39,9 +40,9 @@ class MonthlySummary extends StatelessWidget {
           9: Color.fromARGB(220, 2, 179, 8),
           10: Color.fromARGB(255, 2, 179, 8),
         },
-        onClick: (value) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(value.toString())));
+        onClick: (value) async {
+          await NotifUtils.showSnackBar(context,
+              message: value.toString(), color: Colors.green);
         },
       ),
     );

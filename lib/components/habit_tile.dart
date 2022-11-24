@@ -20,7 +20,7 @@ class HabitTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(bottom: 15.0, left: 20, right: 20),
       child: Slidable(
         endActionPane: ActionPane(
           motion: const StretchMotion(),
@@ -29,7 +29,7 @@ class HabitTile extends StatelessWidget {
             SlidableAction(
               onPressed: settingsTapped,
               backgroundColor: Colors.grey.shade800,
-              icon: Icons.settings,
+              icon: Icons.mode_edit_outline_outlined,
               borderRadius: BorderRadius.circular(12),
             ),
 
@@ -43,7 +43,7 @@ class HabitTile extends StatelessWidget {
           ],
         ),
         child: Container(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(12),

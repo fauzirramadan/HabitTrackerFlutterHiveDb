@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:habittrackertute/components/habit_tile.dart';
 import 'package:habittrackertute/components/month_summary.dart';
-import 'package:habittrackertute/components/my_fab.dart';
+import 'package:habittrackertute/components/my_button.dart';
 import 'package:habittrackertute/components/my_alert_box.dart';
 import 'package:habittrackertute/data/habit_database.dart';
+import 'package:habittrackertute/utils/notif_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  GlobalKey<FormState> keyForm = GlobalKey();
   HabitDatabase db = HabitDatabase();
   final _myBox = Hive.box("Habit_Database");
 
@@ -56,6 +58,7 @@ class _HomePageState extends State<HomePage> {
           hintText: 'Enter habit name..',
           onSave: saveNewHabit,
           onCancel: cancelDialogBox,
+          keyForm: keyForm,
         );
       },
     );
@@ -63,16 +66,20 @@ class _HomePageState extends State<HomePage> {
 
   // save new habit
   void saveNewHabit() {
-    // add new habit to todays habit list
-    setState(() {
-      db.todaysHabitList.add([_newHabitNameController.text, false]);
-    });
+    if (keyForm.currentState!.validate()) {
+      // add new habit to todays habit list
+      setState(() {
+        db.todaysHabitList.add([_newHabitNameController.text, false]);
+      });
 
-    // clear textfield
-    _newHabitNameController.clear();
-    // pop dialog box
-    Navigator.of(context).pop();
-    db.updateDatabase();
+      // clear textfield
+      _newHabitNameController.clear();
+      NotifUtils.showSnackBar(context,
+          color: Colors.green, message: "Jangan lupa dikerjakan ya");
+      // pop dialog box
+      Navigator.of(context).pop();
+      db.updateDatabase();
+    }
   }
 
   // cancel new habit
@@ -94,6 +101,7 @@ class _HomePageState extends State<HomePage> {
           hintText: db.todaysHabitList[index][0],
           onSave: () => saveExistingHabit(index),
           onCancel: cancelDialogBox,
+          keyForm: keyForm,
         );
       },
     );
@@ -120,9 +128,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[300],
-      floatingActionButton: MyFloatingActionButton(onPressed: createNewHabit),
-      body: ListView(
+      body: Column(
         children: [
           // monthly summary heat map
           MonthlySummary(
@@ -131,19 +139,50 @@ class _HomePageState extends State<HomePage> {
           ),
 
           // list of habits
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: db.todaysHabitList.length,
-            itemBuilder: (context, index) {
-              return HabitTile(
-                habitName: db.todaysHabitList[index][0],
-                habitCompleted: db.todaysHabitList[index][1],
-                onChanged: (value) => checkBoxTapped(value, index),
-                settingsTapped: (context) => openHabitSettings(index),
-                deleteTapped: (context) => deleteHabit(index),
-              );
-            },
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30))),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20.0, left: 20),
+                        child: Text(
+                          "My Habits",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 20),
+                        ),
+                      ),
+                      MyButton(
+                        onTap: createNewHabit,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: db.todaysHabitList.length,
+                      itemBuilder: (context, index) {
+                        return HabitTile(
+                          habitName: db.todaysHabitList[index][0],
+                          habitCompleted: db.todaysHabitList[index][1],
+                          onChanged: (value) => checkBoxTapped(value, index),
+                          settingsTapped: (context) => openHabitSettings(index),
+                          deleteTapped: (context) => deleteHabit(index),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           )
         ],
       ),

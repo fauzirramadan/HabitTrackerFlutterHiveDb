@@ -4,6 +4,7 @@ import 'package:habittrackertute/components/month_summary.dart';
 import 'package:habittrackertute/components/my_button.dart';
 import 'package:habittrackertute/components/my_alert_box.dart';
 import 'package:habittrackertute/data/habit_database.dart';
+import 'package:habittrackertute/utils/colors.dart';
 import 'package:habittrackertute/utils/notif_utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
       // clear textfield
       _newHabitNameController.clear();
       NotifUtils.showSnackBar(context,
-          color: Colors.green, message: "Jangan lupa dikerjakan ya");
+          color: semanticGreen, message: "Jangan lupa dikerjakan ya");
       // pop dialog box
       Navigator.of(context).pop();
       db.updateDatabase();
@@ -125,6 +126,8 @@ class _HomePageState extends State<HomePage> {
       db.todaysHabitList.removeAt(index);
     });
     db.updateDatabase();
+    NotifUtils.showSnackBar(context,
+        color: semanticGreen, message: "Berhasil dihapus");
   }
 
   @override

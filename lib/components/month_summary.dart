@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:habittrackertute/datetime/date_time.dart';
+import 'package:habittrackertute/utils/colors.dart';
 import 'package:habittrackertute/utils/notif_utils.dart';
 
 class MonthlySummary extends StatelessWidget {
@@ -55,7 +56,7 @@ class MonthlySummary extends StatelessWidget {
         },
         onClick: (value) async {
           await NotifUtils.showSnackBar(context,
-              message: value.toString(), color: Colors.green);
+              message: value.toString(), color: semanticGreen);
         },
       ),
     );

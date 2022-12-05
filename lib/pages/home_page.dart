@@ -78,7 +78,9 @@ class _HomePageState extends State<HomePage> {
       // clear textfield
       _newHabitNameController.clear();
       NotifUtils.showSnackBar(context,
-          color: semanticGreen, message: "Jangan lupa dikerjakan ya");
+          isSuccess: true,
+          color: semanticGreen,
+          message: "Jangan lupa dikerjakan ya");
       // pop dialog box
       Navigator.of(context).pop();
       db.updateDatabase();
@@ -127,7 +129,7 @@ class _HomePageState extends State<HomePage> {
     });
     db.updateDatabase();
     NotifUtils.showSnackBar(context,
-        color: semanticGreen, message: "Berhasil dihapus");
+        isSuccess: true, color: semanticGreen, message: "Berhasil dihapus");
   }
 
   @override

@@ -56,7 +56,7 @@ class MonthlySummary extends StatelessWidget {
         },
         onClick: (value) async {
           await NotifUtils.showSnackBar(context,
-              message: value.toString(), color: semanticGreen);
+              isSuccess: true, message: value.toString(), color: semanticGreen);
         },
       ),
     );

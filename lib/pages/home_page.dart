@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                         ? const Padding(
                             padding: EdgeInsets.only(top: 100),
                             child: Text(
-                              "KOSONG SEPERTI HATIMU  : )",
+                              "EMPTY LIKE YOUR HEART : )",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w700),
                             ))
